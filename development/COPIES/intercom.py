@@ -1,5 +1,3 @@
-# A very simple intercom.
-#
 # No video, no DWT, no compression, no bitplanes, no data-flow
 # control, no buffering. Only the transmission of the raw audio data,
 # splitted into chunks of fixed length.
@@ -47,9 +45,7 @@ class Intercom:
             print(f"bytes_per_chunk={self.bytes_per_chunk}")
 
     def generate_zero_chunk(self):
-        cell = np.zeros((self.frames_per_chunk, self.number_of_channels), np.int16)
-        return cell
-
+        return np.zeros((self.frames_per_chunk, self.number_of_channels), np.int16)
     def receive_and_buffer(self):
         message, source_address = self.receiving_sock.recvfrom(Intercom.MAX_MESSAGE_SIZE)
         chunk = np.frombuffer(message, np.int16).reshape(self.frames_per_chunk, self.number_of_channels)
@@ -67,7 +63,7 @@ class Intercom:
             
     def run(self):
         with sd.Stream(samplerate=self.frames_per_second, blocksize=self.frames_per_chunk, dtype=np.int16, channels=self.number_of_channels, callback=self.record_send_and_play):
-            print("-=- Press <CTRL> + <c> to quit -=-")
+            print("-=- Press CTRL + c to quit -=-")
             while True:
                 self.receive_and_buffer()
 
